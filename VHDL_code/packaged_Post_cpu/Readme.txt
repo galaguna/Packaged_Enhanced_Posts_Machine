@@ -1,1 +1,1 @@
-VHDL code for Post CPU full functional system
+VHDL code for Post CPU with full functional system
