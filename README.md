@@ -41,13 +41,17 @@ For mor details, see the HDL code Post_sys_speed_cnfg.v/Post_sys_speed_cnfg.vhd.
 
 The CPU system must be programed before a code execution. The RAM and ROM loads are enabled with signal MODE=0. With signal MODE=1, the code execution starts with signal RUN=1.  
 
-To program the code space and access the data space, SPI transfers are used. The SPI word size is 16 bits with the following format:
+To program the code space and access the data space, SPI transfers are used. In the following figure, the SPI pinout for the JA Pmod interface of the Basys3 is presented:
+ 
+![Figure-6]( PMOD_SPI_pinout.png)
 
-![Figure-6](SPI_transfer_words.png)
+The SPI word size is 16 bits with the following format:
+
+![Figure-7](SPI_transfer_words.png)
 
 The bit 15 (MSB) is set to specify a read operation. The address field specifies the location being accessed and de data field contains the information to be written or read. In the following figure, the SPI addressing map is presented:
 
-![Figure-7](SPI_Address_MAP.png)
+![Figure-8](SPI_Address_MAP.png)
   
 
 For SPI transfers, the following specification is assumed:
@@ -60,11 +64,11 @@ In the case of a read sequence, the read command must be followed by a stuff SPI
 
 Within the slave_spi4post module, the SCK frequency is assumed as CLK/8. For example, if the CLK frequency is 50 MHz, the SCK frequency is 6.25 MHz. SPI interface also works with low frequency, for example, if CLK frequency is 1525.879 Hz, the SCK frequency is 190.8 Hz. Additionally, within the post_spictrl module, the SPI base frequency is selected by the parameter CLK_DIVISOR (or CLK_SEL) and one multiplexor. According with the code, and assuming a 100 MHz system clock, the possible SCK frequencies are showed in the following table:
 
-![Figure-8]( SPI_SCK_Sel_Table.png)
+![Figure-9]( SPI_SCK_Sel_Table.png)
 
 As reference, in the following figure, the timing diagram with the SPI transfers for a write/read sequence is illustrated:
 
-![Figure-9](SPI_WRRD_ROM_0x0A59_0x8A5F.png)
+![Figure-10](SPI_WRRD_ROM_0x0A59_0x8A5F.png)
 
 The showed SPI write/read sequence includes:
 
@@ -82,7 +86,6 @@ More detailed information about the instruction set and basic architecture of EP
  
 - Laguna-Sanchez, G.A. (2020). The Post’s Machine Reloaded Booklet.
 https://github.com/galaguna/Posts_Machine_Reloaded_Booklet
-
 
 ## References
 - Post, E.L. (1936). Finite combinatory processes – formulation 1. The Journal of Symbolic Logic, Vol. 1, No. 3, pp. 103-105.
