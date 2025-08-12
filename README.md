@@ -2,7 +2,7 @@
 
 ## How it works
 
-A small architecture for practical implementation of a central processing unit (CPU) is proposed based on an improved Post's Machine, synchronous RAM and SPI communication, all these packaged in the same module. The Post's Machine is like Turing's machine but with minor complexity because of a shortest instruction set. The proposed Post’s Machine project has potential as pedagogical resource, to experiment and verify the fundamental concepts of a simple computer architecture with its instruction set (in this case, only eight instructions). 
+A small architecture for practical implementation of a central processing unit (CPU) is proposed based on an improved Post's Machine, synchronous RAM and SPI communication, all these packaged in the same module. The Post's Machine is like Turing's machine but with minor complexity because of a shortest instruction set. The proposed Post’s Machine project has potential as teaching resource, to experiment and verify the fundamental concepts of a simple computer architecture with its instruction set (in this case, only eight instructions). 
 
 In the seminal work of Emil L. Post (Post, 1936), no real machine was specified but conceptualization and mental experiments were developed. Although the original Post's machine is sustained on the manipulation of an infinite set of boxes, these boxes may be represented, like in Turing's machine, by means of a tape with an infinite number of cells, each one numbered and with the possibility of being observed and marked/erased by a kind of reading/writing head.
 
