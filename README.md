@@ -26,9 +26,14 @@ To enable user access to both code and data memory spaces, before and after the 
  
 The multiplexors are controlled by MODE signal to set the operation mode (programming/execution). Additionally, RUN signal is dedicated to start the code execution. 
 
-In practice, to work with the input and output ports of a Basys3 board, the entire system has been packaged in the Post_sys_4Tiny module, which is represented schematically below:
+In practice, to work with the input and output ports of a Basys3 board, the entire system has been packaged in the Post_sys_speed_cnfg module, which is represented schematically below:
 
 ![Figure-4]( Post_sys_Cnfg_module.png)
+
+Within the Post_sys_speed_cnfg module, the parameter CPU_CLK_SEL is used to select, by means a multiplexor, the CPU clock signal that will be used to execute the fetch-decode cycles. Assuming a 100 MHz system clock, the possible CPU frequencies are showed in the following table:
+
+![Figure-5]( CPU_SCK_Sel_Table.png)
+
 
 For mor details, see the HDL code Post_sys_speed_cnfg.v/Post_sys_speed_cnfg.vhd.
 
@@ -52,11 +57,14 @@ For SPI transfers, the following specification is assumed:
 - The most significant bit is the first to be transmitted.
 
 In the case of a read sequence, the read command must be followed by a stuff SPI word (let's say, all ones or all zeros word). The read information will be in the data field of the SPI word transmitted by the slave SPI.  
-The SCK frequency is fixed in CLK/8. For example, if the CLK frequency is 50 MHz, the SCK frequency is 6.25 MHz. SPI interface also works with low frequency, for example, if CLK frequency is 1525.879 Hz, the SCK frequency is 190.8 Hz.
+
+Within the slave_spi4post module, the SCK frequency is assumed as CLK/8. For example, if the CLK frequency is 50 MHz, the SCK frequency is 6.25 MHz. SPI interface also works with low frequency, for example, if CLK frequency is 1525.879 Hz, the SCK frequency is 190.8 Hz. Additionally, within the post_spictrl module, the SPI base frequency is selected by the parameter CLK_DIVISOR (or CLK_SEL) and one multiplexor. According with the code, and assuming a 100 MHz system clock, the possible SCK frequencies are showed in the following table:
+
+![Figure-8]( SPI_SCK_Sel_Table.png)
 
 As reference, in the following figure, the timing diagram with the SPI transfers for a write/read sequence is illustrated:
 
-![Figure-8](SPI_WRRD_ROM_0x0A59_0x8A5F.png)
+![Figure-9](SPI_WRRD_ROM_0x0A59_0x8A5F.png)
 
 The showed SPI write/read sequence includes:
 
@@ -66,7 +74,7 @@ The showed SPI write/read sequence includes:
      
 Once both code a data are loaded in corresponding ROM and RAM memory, the code may be executed as has been specified above. 
 
-Full functional code is available in this repository, both VHDL and Verilog code. As practical reference, also a master SPI module is attached, both VHDL and Verilog code.
+Full functional code is available in this repository, both VHDL and Verilog code. As practical reference, also a master SPI module is attached, coded with both VHDL and Verilog languages.
 
 ## Additional information
 
