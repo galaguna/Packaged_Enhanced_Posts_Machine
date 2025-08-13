@@ -30,7 +30,7 @@ In practice, to work with the input and output ports of a Basys3 board, the enti
 
 ![Figure-4]( Post_sys_Cnfg_module.png)
 
-Within the Post_sys_speed_cnfg module, the parameter CPU_CLK_SEL is used to select, by means a multiplexor, the CPU clock signal that will be used to execute the fetch-decode cycles. Assuming a 100 MHz system clock, the possible CPU frequencies are showed in the following table:
+Within the Post_sys_speed_cnfg module, the parameter CPU_CLK_SEL is used to select, by means a multiplexor, the CPU clock signal that will be used to drive the machine cycles (fetch-decode-execute). Assuming a 100 MHz system clock, the possible CPU frequencies are showed in the following table:
 
 ![Figure-5]( CPU_SCK_Sel_Table.png)
 
