@@ -3,12 +3,12 @@
 //=============================================================================
 // post_spi_ctrl.v
 //=============================================================================
-// Interfas SPI esclava, con velocidad configurabe, para maquina de Post
+// Interfaz SPI esclava, con velocidad configurable, para maquina de Post
 //=============================================================================
 // Author: Gerardo A. Laguna S.
 // Universidad Autonoma Metropolitana
 // Unidad Lerma
-// 11.julio.2025
+// 19.sep.2025
 //=============================================================================
 //////////////////////////////////////////////////////////////////////////////////
 
