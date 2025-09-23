@@ -2,7 +2,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 //=============================================================================
 // Entidad Post_sys_speed_cnfg con CPU Post, memoria y comunicacion SPI.
-//  * En esta version de puede configurar tanto la velocidad del reloj del CPU como la de la senial SCK del modulo SPI.
+//  * En esta version se puede configurar tanto la velocidad del reloj del CPU como la de la senial SCK del modulo SPI.
 //  * Puerto STATE de 4 bits.
 //=============================================================================
 // Codigo beta
@@ -10,7 +10,7 @@
 // Author: Gerardo A. Laguna S.
 // Universidad Autonoma Metropolitana
 // Unidad Lerma
-// 11.agosto.2025
+// 23.sep.2025
 //=============================================================================
 //////////////////////////////////////////////////////////////////////////////////
 
