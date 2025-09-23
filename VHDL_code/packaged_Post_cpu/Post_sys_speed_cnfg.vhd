@@ -1,6 +1,6 @@
 --=============================================================================
 -- Entidad Post_sys_speed_cnfg con CPU Post, memoria y comunicacion SPI
--- * En esta version de puede configurar tanto la velocidad del reloj del CPU 
+-- * En esta version se puede configurar tanto la velocidad del reloj del CPU 
 --   como la de la senial SCK del modulo SPI.
 --  - El puerto de estado (state) se reduce de 8 a 4 bits.
 --=============================================================================
@@ -9,7 +9,7 @@
 -- Author: Gerardo A. Laguna S.
 -- Universidad Autonoma Metropolitana
 -- Unidad Lerma
--- 11.agosto.2025
+-- 23.sep.2025
 -------------------------------------------------------------------------------
 -- Library declarations
 -------------------------------------------------------------------------------
@@ -287,3 +287,4 @@ my_pulse : pulse_generator
                 div_clk(25) when x"F";
 
 end my_arch;
+
