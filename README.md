@@ -89,3 +89,10 @@ https://github.com/galaguna/Posts_Machine_Reloaded_Booklet
 
 ## References
 - Post, E.L. (1936). Finite combinatory processes – formulation 1. The Journal of Symbolic Logic, Vol. 1, No. 3, pp. 103-105.
+
+## HOW TO CITE
+
+If you mention this project in a publication, I ask that you include the following citation for it
+
+ Laguna-Sanchez, G.A. (2025). Packaged Enhanced Post's Machine.  
+  https://github.com/galaguna/Packaged_Enhanced_Posts_Machine.
