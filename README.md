@@ -24,47 +24,55 @@ To enable user access to both code and data memory spaces, before and after the 
 
 ![Figure-3]( Post_sys_Cnfg_schematic.png)
  
-The multiplexors are controlled by MODE signal to set the operation mode (programming/execution). Additionally, RUN signal is dedicated to start the code execution. 
+The multiplexors are controlled by `MODE` signal to set the operation mode (programming/execution). Additionally, `RUN` signal is dedicated to start the code execution. 
 
-In practice, to work with the input and output ports of a Basys3 board, the entire system has been packaged in the Post_sys_speed_cnfg module, which is represented schematically below:
+In practice, to work with the input and output ports of a Basys3 board, the entire system has been packaged in the `Post_sys_speed_cnfg` module, which is represented schematically below:
 
 ![Figure-4]( Post_sys_Cnfg_module.png)
 
-Within the Post_sys_speed_cnfg module, the parameter CPU_CLK_SEL is used to select, by means a multiplexor, the CPU clock signal that will be used to drive the machine cycles (fetch-decode-execute). Assuming a 100 MHz system clock, the possible CPU frequencies are showed in the following table:
+##Timing Considerations
+
+The `Post_sys_speed_cnfg` module is used to configure the operating timings, including both the processor’s execution speed and the maximum SPI communication speed, via the `CPU_CLK_SEL` and `SPI_CLK_SEL` synthesis arguments, respectively. By default, in order to make the execution rate of the programs visible to the human eye and to ensure reliable SPI communication, the timing arguments are set to `CPU_CLK_SEL=10` and SPI_`CLK_SEL=15`, which corresponds to an execution speed of approximately 48 Hz and a maximum SPI communication speed of about 191 Hz.
+
+Within the `Post_sys_speed_cnfg` module, the argument `CPU_CLK_SEL` is used to select, by means a multiplexor, the CPU clock signal that will be used to drive the machine cycles (fetch-decode-execute). Assuming a 100 MHz system clock, the possible CPU frequencies are showed in the following table:
 
 ![Figure-5]( CPU_SCK_Sel_Table.png)
 
+On the other hand, within the `post_spictrl` module, the SPI base frequency is selected by the parameter `CLK_DIVISOR` (or `CLK_SEL`) also by means a multiplexor. Refered to `SPI_CLK_SEL` argument and assuming a 100 MHz system clock, the SPI base frequency and the corresponding maximum `SCK` frequencies are showed in the following table:
 
-For mor details, see the HDL code Post_sys_speed_cnfg.v/Post_sys_speed_cnfg.vhd.
+![Figure-6]( SPI_SCK_Sel_Table.png)
+
+If we denote the SPI base frequency as `f_SPI_LOC_CLK` and the SPI serial clock frequency as `f_SCK`, it is recommended that `f_SCK < f_SPI_LOC_CLK/8`. For example, if `f_SPI_LOC_CLK` = 1.5625 MHz, then it is recommended that the SPI master device not exceed a frequency of `f_SCK` = 1.5625/8 MHz, that is, `f_SCK` < 195.3 kHz.  As a practical reference for our design, a sufficiently low speed to ensure that SPI transfers are reliable (with very few errors) is `f_SCK` = 190.8 Hz; in this case, the SPI base frequency should be greater than or equal to `f_SPI_LOC_CLK` = 1525.879 Hz.
+
+For mor details, see the HDL code for `Post_sys_speed_cnfg` module.
 
 ## How to test
 
-The CPU system must be programed before a code execution. The RAM and ROM loads are enabled with signal MODE=0. With signal MODE=1, the code execution starts with signal RUN=1.  
+The CPU system must be programed before a code execution. The RAM and ROM loads are enabled with signal `MODE=0`. With signal `MODE=1`, the code execution starts with signal `RUN=1`.  
 
 To program the code space and access the data space, SPI transfers are used. In the following figure, the SPI pinout for the JA Pmod interface of the Basys3 is presented:
  
-![Figure-6]( PMOD_SPI_pinout.png)
+![Figure-7]( PMOD_SPI_pinout.png)
 
 The SPI word size is 16 bits with the following format:
 
-![Figure-7](SPI_transfer_words.png)
+![Figure-8](SPI_transfer_words.png)
 
 The bit 15 (MSB) is set to specify a read operation. The address field specifies the location being accessed and de data field contains the information to be written or read. In the following figure, the SPI addressing map is presented:
 
-![Figure-8](SPI_Address_MAP.png)
+![Figure-9](SPI_Address_MAP.png)
   
-
 For SPI transfers, the following specification is assumed:
-- CS signal is active low, and it idles high. 
-- SCK signal is active low, and it idles high.
-- Data is valid on the second SCK edge (rising or falling) after CS has been asserted. 
+
+- `CS` signal is active low, and it idles high. 
+
+- `SCK` signal is active low, and it idles high.
+
+- Data is valid on the second `SCK` edge (rising or falling) after `CS` has been asserted. 
+
 - The most significant bit is the first to be transmitted.
 
 In the case of a read sequence, the read command must be followed by a stuff SPI word (let's say, all ones or all zeros word). The read information will be in the data field of the SPI word transmitted by the slave SPI.  
-
-Within the slave_spi4post module, the SCK frequency is assumed as CLK/8. For example, if the CLK frequency is 50 MHz, the SCK frequency is 6.25 MHz. SPI interface also works with low frequency, for example, if CLK frequency is 1525.879 Hz, the SCK frequency is 190.8 Hz. Additionally, within the post_spictrl module, the SPI base frequency is selected by the parameter CLK_DIVISOR (or CLK_SEL) and one multiplexor. According with the code, and assuming a 100 MHz system clock, the possible SCK frequencies are showed in the following table:
-
-![Figure-9]( SPI_SCK_Sel_Table.png)
 
 As reference, in the following figure, the timing diagram with the SPI transfers for a write/read sequence is illustrated:
 
@@ -73,26 +81,39 @@ As reference, in the following figure, the timing diagram with the SPI transfers
 The showed SPI write/read sequence includes:
 
 - SPI Command to write 0x9 in 0xA5 ROM address.
+
 - SPI Command to read from 0xA5 ROM address.
+
 - SPI stuff word to retrieve the read data.
      
 Once both code a data are loaded in corresponding ROM and RAM memory, the code may be executed as has been specified above. 
 
-Full functional code is available in this repository, both VHDL and Verilog code. As practical reference, also a master SPI module is attached, coded with both VHDL and Verilog languages.
+Full functional code is available in this repository, both VHDL and Verilog code. As practical reference, also a master SPI module is attached.
+
+## Programming tools
+
+An elementary assembler for Enhanced Post's Machine (MPM) supported CPU is in the following repository:
+
+https://github.com/galaguna/PostCPU_Assembler
+
+Programmer-friendly hardware can be built by hand using the resources available in the following repository:
+
+https://github.com/galaguna/PostCPU_Programming_tools 
 
 ## Additional information
 
 More detailed information about the instruction set and basic architecture of EPM CPU may be found in the following repository:
  
-- Laguna-Sanchez, G.A. (2020). The Post’s Machine Reloaded Booklet.
+Laguna-Sanchez, G.A. (2020). The Post’s Machine Reloaded Booklet.
 https://github.com/galaguna/Posts_Machine_Reloaded_Booklet
 
 ## References
 - Post, E.L. (1936). Finite combinatory processes – formulation 1. The Journal of Symbolic Logic, Vol. 1, No. 3, pp. 103-105.
+- Uspenski, V.A. (1983). Post’s Machine (Little Mathematics Library). Moscow, USSR: MIR Publishers.
 
-## HOW TO CITE
+## How to cite
 
 If you mention this project in a publication, I ask that you include the following citation for it
 
- Laguna-Sanchez, G.A. (2025). Packaged Enhanced Post's Machine.  
-  https://github.com/galaguna/Packaged_Enhanced_Posts_Machine.
+Laguna-Sanchez, G.A. (2026). Packaged Enhanced Post's Machine.  
+https://github.com/galaguna/Packaged_Enhanced_Posts_Machine
